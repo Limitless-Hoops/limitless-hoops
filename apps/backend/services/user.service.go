@@ -1,24 +1,13 @@
 package services
 
 import (
-	"time"
-
 	"github.com/Limitless-Hoops/limitless-hoops/database"
+	"github.com/Limitless-Hoops/limitless-hoops/dto"
 	"github.com/Limitless-Hoops/limitless-hoops/models"
 	"gorm.io/gorm"
 )
 
-type UserWithCount struct {
-	ID             uint   `json:"id"`
-	FirstName      string `json:"first_name"`
-	LastName       string `json:"last_name"`
-	Email          string `json:"email"`
-	PhoneNumber    string `json:"phone_number"`
-	MembershipTier string `json:"membership_tier"`
-	DependentCount int    `json:"dependent_count"`
-}
-
-func GetAllUsersWithDependentCount() ([]UserWithCount, error) {
+func GetAllUsersWithDependentCount() ([]dto.UserWithCountDTO, error) {
 	var users []models.User
 	err := database.DB.
 		Preload("GuardianLinks", func(db *gorm.DB) *gorm.DB {
@@ -29,9 +18,9 @@ func GetAllUsersWithDependentCount() ([]UserWithCount, error) {
 		return nil, err
 	}
 
-	var result []UserWithCount
+	var result []dto.UserWithCountDTO
 	for _, u := range users {
-		result = append(result, UserWithCount{
+		result = append(result, dto.UserWithCountDTO{
 			ID:             u.ID,
 			FirstName:      u.FirstName,
 			LastName:       u.LastName,
@@ -44,53 +33,22 @@ func GetAllUsersWithDependentCount() ([]UserWithCount, error) {
 	return result, nil
 }
 
-type EmergencyContactResponse struct {
-	ID          uint       `json:"id"`
-	FirstName   string     `json:"first_name"`
-	LastName    string     `json:"last_name"`
-	PhoneNumber string     `json:"phone_number"`
-	DateOfBirth *time.Time `json:"date_of_birth"`
-	Relation    string     `json:"relation"`
-}
-
-type DependentWithContacts struct {
-	ID                uint                       `json:"id"`
-	FirstName         string                     `json:"first_name"`
-	LastName          string                     `json:"last_name"`
-	Email             *string                    `json:"email"`
-	PhoneNumber       *string                    `json:"phone_number"`
-	DateOfBirth       *time.Time                 `json:"date_of_birth"`
-	MembershipTier    string                     `json:"membership_tier"`
-	EmergencyContacts []EmergencyContactResponse `json:"emergency_contacts"`
-}
-
-type UserWithDependents struct {
-	ID             uint                    `json:"id"`
-	FirstName      string                  `json:"first_name"`
-	LastName       string                  `json:"last_name"`
-	Email          string                  `json:"email"`
-	PhoneNumber    string                  `json:"phone_number"`
-	MembershipTier string                  `json:"membership_tier"`
-	DateOfBirth    *time.Time              `json:"date_of_birth"`
-	Dependents     []DependentWithContacts `json:"dependents"`
-}
-
-func GetUserByIDWithDependentsAndContacts(userID uint) (*UserWithDependents, error) {
+func GetUserByIDWithDependentsAndContacts(userID uint) (dto.UserWithDependentsDTO, error) {
 	var user models.User
 	err := database.DB.
 		Preload("GuardianLinks.Dependent.EmergencyContacts").
 		First(&user, userID).Error
 	if err != nil {
-		return nil, err
+		return dto.UserWithDependentsDTO{}, err
 	}
 
-	var dependents []DependentWithContacts
+	var dependents []dto.DependentDTO
 	for _, link := range user.GuardianLinks {
 		d := link.Dependent
 
-		var cleanContacts []EmergencyContactResponse
+		var contacts []dto.EmergencyContactDTO
 		for _, ec := range d.EmergencyContacts {
-			cleanContacts = append(cleanContacts, EmergencyContactResponse{
+			contacts = append(contacts, dto.EmergencyContactDTO{
 				ID:          ec.ID,
 				FirstName:   ec.FirstName,
 				LastName:    ec.LastName,
@@ -100,7 +58,7 @@ func GetUserByIDWithDependentsAndContacts(userID uint) (*UserWithDependents, err
 			})
 		}
 
-		dependents = append(dependents, DependentWithContacts{
+		dependents = append(dependents, dto.DependentDTO{
 			ID:                d.ID,
 			FirstName:         d.FirstName,
 			LastName:          d.LastName,
@@ -108,11 +66,11 @@ func GetUserByIDWithDependentsAndContacts(userID uint) (*UserWithDependents, err
 			PhoneNumber:       d.PhoneNumber,
 			DateOfBirth:       d.DateOfBirth,
 			MembershipTier:    d.MembershipTier,
-			EmergencyContacts: cleanContacts,
+			EmergencyContacts: contacts,
 		})
 	}
 
-	return &UserWithDependents{
+	return dto.UserWithDependentsDTO{
 		ID:             user.ID,
 		FirstName:      user.FirstName,
 		LastName:       user.LastName,
@@ -124,7 +82,7 @@ func GetUserByIDWithDependentsAndContacts(userID uint) (*UserWithDependents, err
 	}, nil
 }
 
-func GetDependentsForUser(userID uint) ([]DependentWithContacts, error) {
+func GetDependentsForUser(userID uint) ([]dto.DependentDTO, error) {
 	var links []models.GuardianLink
 	err := database.DB.
 		Preload("Dependent.EmergencyContacts").
@@ -134,13 +92,13 @@ func GetDependentsForUser(userID uint) ([]DependentWithContacts, error) {
 		return nil, err
 	}
 
-	var dependents []DependentWithContacts
+	var dependents []dto.DependentDTO
 	for _, link := range links {
 		d := link.Dependent
 
-		var cleanContacts []EmergencyContactResponse
+		var contacts []dto.EmergencyContactDTO
 		for _, ec := range d.EmergencyContacts {
-			cleanContacts = append(cleanContacts, EmergencyContactResponse{
+			contacts = append(contacts, dto.EmergencyContactDTO{
 				ID:          ec.ID,
 				FirstName:   ec.FirstName,
 				LastName:    ec.LastName,
@@ -150,7 +108,7 @@ func GetDependentsForUser(userID uint) ([]DependentWithContacts, error) {
 			})
 		}
 
-		dependents = append(dependents, DependentWithContacts{
+		dependents = append(dependents, dto.DependentDTO{
 			ID:                d.ID,
 			FirstName:         d.FirstName,
 			LastName:          d.LastName,
@@ -158,7 +116,7 @@ func GetDependentsForUser(userID uint) ([]DependentWithContacts, error) {
 			PhoneNumber:       d.PhoneNumber,
 			DateOfBirth:       d.DateOfBirth,
 			MembershipTier:    d.MembershipTier,
-			EmergencyContacts: cleanContacts,
+			EmergencyContacts: contacts,
 		})
 	}
 

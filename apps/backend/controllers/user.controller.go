@@ -2,35 +2,16 @@ package controllers
 
 import (
 	"strconv"
-	"time"
 
+	"github.com/Limitless-Hoops/limitless-hoops/dto"
 	"github.com/Limitless-Hoops/limitless-hoops/models"
 	"github.com/Limitless-Hoops/limitless-hoops/services"
 	"github.com/Limitless-Hoops/limitless-hoops/utils"
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
-// UserInput DTO for incoming user data
-type UserInput struct {
-	FirstName      string    `json:"first_name"`
-	LastName       string    `json:"last_name"`
-	Email          string    `json:"email"`
-	PhoneNumber    string    `json:"phone_number"`
-	Password       string    `json:"password"` // Accept plain text password here
-	MembershipTier string    `json:"membership_tier"`
-	DateOfBirth    time.Time `json:"date_of_birth"`
-}
-
-// UserUpdateInput DTO for partial update (PATCH)
-type UserUpdateInput struct {
-	FirstName      *string    `json:"first_name,omitempty"`
-	LastName       *string    `json:"last_name,omitempty"`
-	Email          *string    `json:"email,omitempty"`
-	PhoneNumber    *string    `json:"phone_number,omitempty"`
-	Password       *string    `json:"password,omitempty"` // Accept plain text password here
-	MembershipTier *string    `json:"membership_tier,omitempty"`
-	DateOfBirth    *time.Time `json:"date_of_birth,omitempty"`
-}
+var validate = validator.New()
 
 // GetUsers GET /users
 func GetUsers(c *fiber.Ctx) error {
@@ -75,9 +56,12 @@ func GetUserDependents(c *fiber.Ctx) error {
 
 // CreateUser POST /users
 func CreateUser(c *fiber.Ctx) error {
-	var input UserInput
+	var input dto.CreateUserDTO
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+	if err := validate.Struct(input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"validation_error": err.Error()})
 	}
 
 	hash, err := utils.HashPassword(input.Password)
@@ -99,7 +83,15 @@ func CreateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(user)
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
+		"id":              user.ID,
+		"first_name":      user.FirstName,
+		"last_name":       user.LastName,
+		"email":           user.Email,
+		"phone_number":    user.PhoneNumber,
+		"membership_tier": user.MembershipTier,
+		"date_of_birth":   user.DateOfBirth,
+	})
 }
 
 // UpdateUser PATCH /users/:id
@@ -110,9 +102,12 @@ func UpdateUser(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})
 	}
 
-	var input UserUpdateInput
+	var input dto.UpdateUserDTO
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
+	}
+	if err := validate.Struct(input); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"validation_error": err.Error()})
 	}
 
 	updates := make(map[string]interface{})
@@ -128,7 +123,7 @@ func UpdateUser(c *fiber.Ctx) error {
 	if input.PhoneNumber != nil {
 		updates["phone_number"] = *input.PhoneNumber
 	}
-	if input.MembershipTier != nil {
+	if input.MembershipTier != nil && *input.MembershipTier != "" {
 		updates["membership_tier"] = *input.MembershipTier
 	}
 	if input.DateOfBirth != nil {
