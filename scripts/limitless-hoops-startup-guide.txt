@@ -1,0 +1,20 @@
+SETUP LOCAL HOST ALIASES
+- Run the script for your OS from the setup-scripts directory: LinuxOrMac-alias.sh, Windows-alias.sh
+	- Linux/macOS Run CMD: sudo sh LinuxOrMacos-alias.sh
+	- Windows must be run from Command Prompt as Administrator; Run CMD: powershell -ExecutionPolicy Bypass -File Windows-alias.ps1
+
+INSTALL TOOLS
+- Run the script for your OS from the setup-scripts directory: LinuxOrMac-tools.sh, Windows-tools.ps1
+    - Linux/macOS Run CMD: sudo sh LinuxOrMac-tools.sh
+	- Windows must be run from Command Prompt as Administrator; Run CMD: powershell -ExecutionPolicy Bypass -File Windows-tools.ps1
+
+CREATE SSL CERT WITH MKCERT
+- Run the script for your OS from the setup-scripts directory: LinuxOrMac-mkcert.sh, Windows-mkcert.ps1
+    - Linux/macOS Run CMD: sudo sh LinuxOrMac-mkcert.sh
+	- Windows must be run from Command Prompt as Administrator; Run CMD: powershell -ExecutionPolicy Bypass -File Windows-mkcert.ps1
+
+GET ENV FILE
+- For security and dynamic variable purposes, the .env file is not part of the GitHub Repo. To get the .env file, contact me.
+
+CREATE PERSISTENT DATA FOLDER
+- Linux/macOS/Windows, inside of project root folder (limitless_hoops/), Run CMD: mkdir postgres_data

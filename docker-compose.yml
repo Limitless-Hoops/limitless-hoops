@@ -1,0 +1,57 @@
+services:
+  backend:
+    build:
+      context: ./apps/backend
+      target: development
+      args:
+        FRONTEND_URL: https://limitlesshoops.dev
+    container_name: backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    depends_on:
+      - postgres
+    expose:
+      - "${VITE_BACKEND_PORT}"
+    networks:
+      - limitless
+
+  postgres:
+    image: postgres:17.4-alpine3.21
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - limitless
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "${VITE_BACKEND_PORT}:${VITE_BACKEND_PORT}"
+      - "${VITE_FRONTEND_PORT}:${VITE_FRONTEND_PORT}"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/nginx/certs
+    depends_on:
+      - backend
+      # - frontend # Uncomment when frontend is added
+    networks:
+      - limitless
+
+volumes:
+  postgres_data:
+
+networks:
+  limitless:
+    driver: bridge
