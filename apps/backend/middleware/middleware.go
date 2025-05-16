@@ -6,10 +6,9 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
-// Setup TODO: Set Correct Origin and Allow Credentials to True when Frontend is built
-func Setup(app *fiber.App, conf *config.Config) {
+func Setup(app *fiber.App) {
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     conf.FrontendUrl,
+		AllowOrigins:     config.AppConfig.FrontendUrl,
 		AllowMethods:     "GET,POST,PUT,PATCH,DELETE,OPTIONS",
 		AllowHeaders:     "Content-Type, Authorization",
 		AllowCredentials: true,

@@ -1,5 +1,6 @@
 package controllers
 
+import val "github.com/Limitless-Hoops/limitless-hoops/validator"
 import (
 	"strconv"
 
@@ -7,13 +8,10 @@ import (
 	"github.com/Limitless-Hoops/limitless-hoops/models"
 	"github.com/Limitless-Hoops/limitless-hoops/services"
 	"github.com/Limitless-Hoops/limitless-hoops/utils"
-	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
-var validate = validator.New()
-
-// GetUsers GET /users
+// GetUsers returns a lightweight list of users with dependent counts
 func GetUsers(c *fiber.Ctx) error {
 	users, err := services.GetAllUsersWithDependentCount()
 	if err != nil {
@@ -22,53 +20,45 @@ func GetUsers(c *fiber.Ctx) error {
 	return c.JSON(users)
 }
 
-// GetUserByID GET /users/:id
+// GetUserByID returns a full user profile with their dependents and emergency contacts
 func GetUserByID(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, err := strconv.ParseUint(idParam, 10, 64)
+	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})
 	}
-
 	user, err := services.GetUserByIDWithDependentsAndContacts(uint(id))
 	if err != nil {
 		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "User not found"})
 	}
-
 	return c.JSON(user)
 }
 
-// GetUserDependents GET /users/:id/dependents
+// GetUserDependents returns just the dependents of a given user
 func GetUserDependents(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, err := strconv.ParseUint(idParam, 10, 64)
+	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})
 	}
-
 	dependents, err := services.GetDependentsForUser(uint(id))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
 	return c.JSON(dependents)
 }
 
-// CreateUser POST /users
+// CreateUser creates a new user with a hashed password and validated input
 func CreateUser(c *fiber.Ctx) error {
 	var input dto.CreateUserDTO
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
-	if err := validate.Struct(input); err != nil {
+	if err := val.Validate.Struct(input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"validation_error": err.Error()})
 	}
-
 	hash, err := utils.HashPassword(input.Password)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to hash password"})
 	}
-
 	user := models.User{
 		FirstName:      input.FirstName,
 		LastName:       input.LastName,
@@ -78,11 +68,9 @@ func CreateUser(c *fiber.Ctx) error {
 		MembershipTier: input.MembershipTier,
 		DateOfBirth:    &input.DateOfBirth,
 	}
-
 	if err := services.CreateUser(&user); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
 		"id":              user.ID,
 		"first_name":      user.FirstName,
@@ -94,19 +82,17 @@ func CreateUser(c *fiber.Ctx) error {
 	})
 }
 
-// UpdateUser PATCH /users/:id
+// UpdateUser applies patch-style updates to allowed fields on a user (excluding password)
 func UpdateUser(c *fiber.Ctx) error {
-	idParam := c.Params("id")
-	id, err := strconv.ParseUint(idParam, 10, 64)
+	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid user ID"})
 	}
-
 	var input dto.UpdateUserDTO
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
-	if err := validate.Struct(input); err != nil {
+	if err := val.Validate.Struct(input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"validation_error": err.Error()})
 	}
 
@@ -129,17 +115,9 @@ func UpdateUser(c *fiber.Ctx) error {
 	if input.DateOfBirth != nil {
 		updates["date_of_birth"] = *input.DateOfBirth
 	}
-	if input.Password != nil && *input.Password != "" {
-		hash, err := utils.HashPassword(*input.Password)
-		if err != nil {
-			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to hash password"})
-		}
-		updates["password_hash"] = hash
-	}
 
 	if err := services.UpdateUser(uint(id), updates); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-
 	return c.SendStatus(fiber.StatusNoContent)
 }

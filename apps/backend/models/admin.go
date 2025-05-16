@@ -15,5 +15,8 @@ type Admin struct {
 	Role         string     `gorm:"default:staff" json:"role"` // e.g. staff, admin, superadmin
 	DateOfBirth  *time.Time `gorm:"not null" json:"date_of_birth"`
 
+	LastLogin    *time.Time `json:"last_login,omitempty"`
+	LastActiveAt *time.Time `json:"last_active_at,omitempty"`
+
 	Dependents []Dependent `gorm:"foreignKey:AdminID" json:"dependents"`
 }

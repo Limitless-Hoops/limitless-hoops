@@ -11,13 +11,13 @@ import (
 	"time"
 )
 
-func Start(app *fiber.App, conf *config.Config) {
+func Start(app *fiber.App) {
 	go func() {
-		if err := app.Listen(":" + conf.BackendPort); err != nil {
+		if err := app.Listen(":" + config.AppConfig.BackendPort); err != nil {
 			log.Panicf("Failed to start server: %v", err)
 		}
 	}()
-	log.Println("Server running on port " + conf.BackendPort)
+	log.Println("Server running on port " + config.AppConfig.BackendPort)
 
 	// Graceful shutdown
 	quit := make(chan os.Signal, 1)

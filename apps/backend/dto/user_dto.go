@@ -32,6 +32,11 @@ type UpdateUserDTO struct {
 	DateOfBirth    *time.Time `json:"date_of_birth,omitempty" validate:"omitempty"`
 }
 
+type UpdatePasswordDTO struct {
+	OldPassword string `json:"old_password" validate:"required"`
+	NewPassword string `json:"new_password" validate:"required,min=8"`
+}
+
 type EmergencyContactDTO struct {
 	ID          uint       `json:"id"`
 	FirstName   string     `json:"first_name"`

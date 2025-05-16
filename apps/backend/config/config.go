@@ -18,6 +18,9 @@ type Config struct {
 	JwtKey string
 }
 
+// AppConfig Global config instance
+var AppConfig = LoadConfig()
+
 func LoadConfig() *Config {
 	return &Config{
 		// Database Vars
@@ -32,7 +35,7 @@ func LoadConfig() *Config {
 		BackendPort: getEnv("VITE_BACKEND_PORT", "80"),
 
 		// Auth
-		JwtKey: getEnv("JWT_SECRET", ""),
+		JwtKey: getEnv("JWT_SECRET", "default_fallback_secret"),
 	}
 }
 

@@ -6,10 +6,6 @@ import (
 	"time"
 )
 
-var conf = config.LoadConfig()
-
-var jwtKey = conf.JwtKey
-
 type Claims struct {
 	UserID uint   `json:"user_id"`
 	Role   string `json:"role"` // "user", "dependent", "admin"
@@ -26,5 +22,5 @@ func GenerateJWT(userID uint, role string) (string, error) {
 		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwtKey)
+	return token.SignedString([]byte(config.AppConfig.JwtKey))
 }

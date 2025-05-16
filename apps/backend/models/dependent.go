@@ -18,6 +18,9 @@ type Dependent struct {
 	AdminID *uint  `json:"admin_id"`
 	Admin   *Admin `gorm:"foreignKey:AdminID" json:"admin"`
 
+	LastLogin    *time.Time `json:"last_login,omitempty"`
+	LastActiveAt *time.Time `json:"last_active_at,omitempty"`
+
 	GuardianLinks     []GuardianLink     `gorm:"constraint:OnDelete:CASCADE;" json:"guardian_links"`
 	EmergencyContacts []EmergencyContact `gorm:"many2many:dependent_emergency_contacts;" json:"emergency_contacts"`
 }

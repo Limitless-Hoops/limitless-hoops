@@ -10,4 +10,7 @@ func Setup(app *fiber.App) {
 
 	Health(v1)
 	UserRoutes(v1)
+	AuthRoutes(v1)
+	AdminRoutes(v1)
+	DependentRoutes(v1)
 }

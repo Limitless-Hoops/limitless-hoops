@@ -16,5 +16,8 @@ CREATE SSL CERT WITH MKCERT
 GET ENV FILE
 - For security and dynamic variable purposes, the .env file is not part of the GitHub Repo. To get the .env file, contact me.
 
+GET CERTS FILES
+- For security and dynamic variable purposes, the cert files are not part of the GitHub Repo. To get the cert files, contact me.
+
 CREATE PERSISTENT DATA FOLDER
 - Linux/macOS/Windows, inside of project root folder (limitless_hoops/), Run CMD: mkdir postgres_data

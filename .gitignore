@@ -1,3 +1,5 @@
 .env
-postgres_data/
-.idea/
+postgres_data
+.idea
+nginx/certs/*.crt
+nginx/certs/*.key

@@ -15,5 +15,8 @@ type User struct {
 	MembershipTier string     `gorm:"type:varchar(20);default:'free'" json:"membership_tier"`
 	DateOfBirth    *time.Time `gorm:"not null" json:"date_of_birth"`
 
+	LastLogin    *time.Time `json:"last_login,omitempty"`
+	LastActiveAt *time.Time `json:"last_active_at,omitempty"`
+
 	GuardianLinks []GuardianLink `gorm:"constraint:OnDelete:CASCADE;" json:"guardian_links"`
 }

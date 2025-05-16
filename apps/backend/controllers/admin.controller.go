@@ -11,33 +11,33 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// GetDependents GET /dependents → list all dependents with guardian counts
-func GetDependents(c *fiber.Ctx) error {
-	dependents, err := services.GetAllDependentsWithGuardianCount()
+// GetAdmins GET /admins → list all admins with dependent counts
+func GetAdmins(c *fiber.Ctx) error {
+	admins, err := services.GetAllAdminsWithDependentCount()
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
-	return c.JSON(dependents)
+	return c.JSON(admins)
 }
 
-// GetDependentByID GET /dependents/:id → basic dependent info
-func GetDependentByID(c *fiber.Ctx) error {
+// GetAdminByID GET /admins/:id → return basic admin info
+func GetAdminByID(c *fiber.Ctx) error {
 	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid dependent ID"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid admin ID"})
 	}
 
-	dependent, err := services.GetDependentByID(uint(id))
+	admin, err := services.GetAdminByID(uint(id))
 	if err != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Dependent not found"})
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Admin not found"})
 	}
 
-	return c.JSON(dependent)
+	return c.JSON(admin)
 }
 
-// CreateDependent POST /dependents
-func CreateDependent(c *fiber.Ctx) error {
-	var input dto.CreateDependentDTO
+// CreateAdmin POST /admins
+func CreateAdmin(c *fiber.Ctx) error {
+	var input dto.CreateAdminDTO
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
@@ -50,41 +50,39 @@ func CreateDependent(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to hash password"})
 	}
 
-	dependent := models.Dependent{
-		FirstName:      input.FirstName,
-		LastName:       input.LastName,
-		Email:          &input.Email,
-		PhoneNumber:    &input.PhoneNumber,
-		PasswordHash:   hash,
-		MembershipTier: input.MembershipTier,
-		DateOfBirth:    &input.DateOfBirth,
-		AdminID:        input.AdminID,
+	admin := models.Admin{
+		FirstName:    input.FirstName,
+		LastName:     input.LastName,
+		Email:        input.Email,
+		PhoneNumber:  input.PhoneNumber,
+		PasswordHash: hash,
+		Role:         input.Role,
+		DateOfBirth:  &input.DateOfBirth,
 	}
 
-	if err := services.CreateDependent(&dependent); err != nil {
+	if err := services.CreateAdmin(&admin); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"id":              dependent.ID,
-		"first_name":      dependent.FirstName,
-		"last_name":       dependent.LastName,
-		"email":           dependent.Email,
-		"phone_number":    dependent.PhoneNumber,
-		"membership_tier": dependent.MembershipTier,
-		"date_of_birth":   dependent.DateOfBirth,
-		"admin_id":        dependent.AdminID,
+		"id":            admin.ID,
+		"first_name":    admin.FirstName,
+		"last_name":     admin.LastName,
+		"email":         admin.Email,
+		"phone_number":  admin.PhoneNumber,
+		"role":          admin.Role,
+		"date_of_birth": admin.DateOfBirth,
 	})
 }
 
-// UpdateDependent PATCH /dependents/:id
-func UpdateDependent(c *fiber.Ctx) error {
+// UpdateAdmin PATCH /admins/:id
+func UpdateAdmin(c *fiber.Ctx) error {
 	id, err := strconv.ParseUint(c.Params("id"), 10, 64)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid dependent ID"})
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid admin ID"})
 	}
 
-	var input dto.UpdateDependentDTO
+	var input dto.UpdateAdminDTO
 	if err := c.BodyParser(&input); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid request body"})
 	}
@@ -105,17 +103,14 @@ func UpdateDependent(c *fiber.Ctx) error {
 	if input.PhoneNumber != nil {
 		updates["phone_number"] = *input.PhoneNumber
 	}
-	if input.MembershipTier != nil {
-		updates["membership_tier"] = *input.MembershipTier
+	if input.Role != nil {
+		updates["role"] = *input.Role
 	}
 	if input.DateOfBirth != nil {
 		updates["date_of_birth"] = *input.DateOfBirth
 	}
-	if input.AdminID != nil {
-		updates["admin_id"] = *input.AdminID
-	}
 
-	if err := services.UpdateDependent(uint(id), updates); err != nil {
+	if err := services.UpdateAdmin(uint(id), updates); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 

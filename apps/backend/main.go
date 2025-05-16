@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/Limitless-Hoops/limitless-hoops/config"
 	"github.com/Limitless-Hoops/limitless-hoops/database"
 	"github.com/Limitless-Hoops/limitless-hoops/middleware"
 	"github.com/Limitless-Hoops/limitless-hoops/routes"
@@ -10,11 +9,9 @@ import (
 )
 
 func main() {
-	conf := config.LoadConfig()
-
 	app := fiber.New()
 
-	middleware.Setup(app, conf)
+	middleware.Setup(app)
 
 	database.Connect()
 	defer database.Close()
@@ -22,5 +19,5 @@ func main() {
 
 	routes.Setup(app)
 
-	server.Start(app, conf)
+	server.Start(app)
 }

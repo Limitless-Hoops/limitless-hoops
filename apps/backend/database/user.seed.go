@@ -11,6 +11,7 @@ import (
 )
 
 func UserSeed() error {
+
 	users := []struct {
 		FirstName      string
 		LastName       string
@@ -38,6 +39,7 @@ func UserSeed() error {
 		if err != nil {
 			return err
 		}
+		log.Println("🔐 Storing hash for", u.Email, "→", hash)
 
 		user := models.User{
 			FirstName:      u.FirstName,
@@ -45,7 +47,7 @@ func UserSeed() error {
 			Email:          u.Email,
 			PhoneNumber:    u.PhoneNumber,
 			PasswordHash:   hash,
-			MembershipTier: "basic",
+			MembershipTier: u.MembershipTier,
 			DateOfBirth:    &u.DateOfBirth,
 		}
 
