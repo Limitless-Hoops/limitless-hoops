@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  postgres-test:
+    image: postgres:17.4-alpine3.21
+    container_name: postgres-test
+    restart: unless-stopped
+    environment:
+      DB_TEST_HOST: postgres_test
+      DB_TEST_PORT: 5433
+      DB_TEST_NAME: limitless_test
+      DB_TEST_USER: test_user
+      DB_TEST_PASSWORD: test_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_test_data:/var/lib/postgresql/data
+    networks:
+      - limitless
+
+networks:
+  limitless:
+    external: true
+
+volumes:
+  pg_test_data:
