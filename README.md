@@ -1,2 +1,2 @@
 # limitless-hoops
-Limitless Hoops MonoRepo
+Limitless Hoops Monolithic Repository
