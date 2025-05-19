@@ -66,8 +66,15 @@ function Install-Gotestfmt {
     Write-Host "✅ gotestfmt installed"
 }
 
+function Install-Staticcheck {
+    Write-Host "`n🕵️ Installing staticcheck..."
+    & "$env:USERPROFILE\go\bin\go.exe" install "honnef.co/go/tools/cmd/staticcheck@latest"
+    Write-Host "✅ staticcheck installed"
+}
+
 Install-Go
 Install-Docker
 Install-Gotestfmt
+Install_Staticcheck
 
 Write-Host "`n✅ All tools installed successfully!"

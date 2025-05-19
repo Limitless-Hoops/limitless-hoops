@@ -80,6 +80,12 @@ install_gotestfmt() {
   echo "✅ gotestfmt installed at: $(which gotestfmt)"
 }
 
+install_staticcheck() {
+  echo "🕵️ Installing staticcheck..."
+  go install honnef.co/go/tools/cmd/staticcheck@latest
+  echo "✅ staticcheck installed at: $(which staticcheck)"
+}
+
 # === OS Handling ===
 
 if [[ "$OS" == "Darwin" ]]; then
@@ -96,3 +102,4 @@ else
 fi
 
 install_gotestfmt
+install_staticcheck

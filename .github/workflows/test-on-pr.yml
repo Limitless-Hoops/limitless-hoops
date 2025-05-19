@@ -1,0 +1,50 @@
+name: Run Go Tests
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.2'
+
+      - name: Install staticcheck
+        run: |
+          go install honnef.co/go/tools/cmd/staticcheck@latest
+          echo "$HOME/go/bin" >> $GITHUB_PATH
+
+      - name: Make test script executable
+        run: chmod +x apps/backend/tests/run-tests.sh
+
+      - name: Run Go tests
+        working-directory: apps/backend/tests
+        run: |
+          echo "🔎 Running CI tests..."
+          go test ./...
+
+      - name: Run go vet
+        working-directory: apps/backend/tests
+        run: |
+          echo "🧠 Running go vet..."
+          go vet ./...
+
+      - name: Run staticcheck
+        working-directory: apps/backend/tests
+        run: |
+          echo "🕵️ Running staticcheck..."
+          staticcheck ./...
+
+      # - name: Check test coverage (disabled for now)
+      #   working-directory: apps/backend/tests
+      #   run: |
+      #     echo "📊 Checking test coverage..."
+      #     go test -cover ./...
