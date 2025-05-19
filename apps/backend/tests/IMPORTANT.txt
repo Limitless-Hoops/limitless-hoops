@@ -1,0 +1,6 @@
+Run:
+
+go test ./... -v && echo "✅ ALL TESTS PASSED"
+
+to show if all tests passed without having to manually check each test
+separately in logs.

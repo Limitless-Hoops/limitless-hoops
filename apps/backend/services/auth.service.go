@@ -7,7 +7,7 @@ import (
 	"github.com/Limitless-Hoops/limitless-hoops/database"
 	"github.com/Limitless-Hoops/limitless-hoops/dto"
 	"github.com/Limitless-Hoops/limitless-hoops/models"
-	"github.com/Limitless-Hoops/limitless-hoops/utils"
+	"github.com/Limitless-Hoops/limitless-hoops/utilities"
 )
 
 // Login authenticates based on role and returns JWT
@@ -50,12 +50,12 @@ func Login(dto dto.LoginDTO) (string, error) {
 		return "", errors.New("invalid role")
 	}
 
-	if err := utils.CheckPassword(hashedPassword, dto.Password); err != nil {
+	if err := utilities.CheckPassword(hashedPassword, dto.Password); err != nil {
 		log.Println("Password check failed:", err)
 		return "", errors.New("invalid credentials")
 	}
 
-	return utils.GenerateJWT(id, dto.Role)
+	return utilities.GenerateJWT(id, dto.Role)
 }
 
 // GetProfileByRole returns DTO info for /me based on the JWT role
@@ -103,11 +103,11 @@ func UpdatePasswordByRole(id uint, role, oldPassword, newPassword string) error 
 		return errors.New("invalid role")
 	}
 
-	if err := utils.CheckPassword(currentHash, oldPassword); err != nil {
+	if err := utilities.CheckPassword(currentHash, oldPassword); err != nil {
 		return errors.New("old password is incorrect")
 	}
 
-	hashed, err := utils.HashPassword(newPassword)
+	hashed, err := utilities.HashPassword(newPassword)
 	if err != nil {
 		return errors.New("failed to hash new password")
 	}

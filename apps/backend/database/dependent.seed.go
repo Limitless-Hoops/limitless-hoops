@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/Limitless-Hoops/limitless-hoops/models"
-	"github.com/Limitless-Hoops/limitless-hoops/utils"
+	"github.com/Limitless-Hoops/limitless-hoops/utilities"
 	"gorm.io/gorm"
 )
 
@@ -58,7 +58,7 @@ func DependentSeed() error {
 			return err
 		}
 
-		hash, err := utils.HashPassword(d.Password)
+		hash, err := utilities.HashPassword(d.Password)
 		if err != nil {
 			return err
 		}

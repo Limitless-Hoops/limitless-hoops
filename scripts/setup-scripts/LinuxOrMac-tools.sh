@@ -4,7 +4,7 @@ set -e
 
 GO_VERSION="1.24.2"
 DOCKER_VERSION="28.1.1"
-
+GOTESTFMT_VERSION="1.3.0"
 ARCH="amd64"
 OS="$(uname -s)"
 
@@ -47,8 +47,7 @@ install_docker_linux() {
     lsb-release
 
   sudo install -m 0755 -d /etc/apt/keyrings
-curl -fsSL "https://download.docker.com/linux/$(. /etc/os-release && echo "$ID")/gpg"
-    sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  curl -fsSL "https://download.docker.com/linux/$(. /etc/os-release && echo "$ID")/gpg" | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
   sudo chmod a+r /etc/apt/keyrings/docker.gpg
 
   echo \
@@ -75,6 +74,12 @@ install_docker_macos() {
   echo "👉 Visit: https://www.docker.com/products/docker-desktop/"
 }
 
+install_gotestfmt() {
+  echo "🧪 Installing gotestfmt $GOTESTFMT_VERSION..."
+  go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@v${GOTESTFMT_VERSION}
+  echo "✅ gotestfmt installed at: $(which gotestfmt)"
+}
+
 # === OS Handling ===
 
 if [[ "$OS" == "Darwin" ]]; then
@@ -89,3 +94,5 @@ else
   echo "❌ Unsupported OS: $OS"
   exit 1
 fi
+
+install_gotestfmt

@@ -55,7 +55,11 @@ func CreateAdmin(admin *models.Admin) error {
 
 // UpdateAdmin modifies an existing admin's allowed fields
 func UpdateAdmin(adminID uint, updates map[string]interface{}) error {
-	return database.DB.Model(&models.Admin{}).Where("id = ?", adminID).Updates(updates).Error
+	tx := database.DB.Model(&models.Admin{}).Where("id = ?", adminID).Updates(updates)
+	if tx.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}
+	return tx.Error
 }
 
 // FindAdminByEmail returns an admin by email

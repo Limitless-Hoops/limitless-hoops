@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/Limitless-Hoops/limitless-hoops/models"
-	"github.com/Limitless-Hoops/limitless-hoops/utils"
+	"github.com/Limitless-Hoops/limitless-hoops/utilities"
 )
 
 func UserSeed() error {
@@ -35,7 +35,7 @@ func UserSeed() error {
 			return err
 		}
 
-		hash, err := utils.HashPassword(u.Password)
+		hash, err := utilities.HashPassword(u.Password)
 		if err != nil {
 			return err
 		}

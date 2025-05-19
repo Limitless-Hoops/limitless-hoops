@@ -6,7 +6,7 @@ import (
 	"github.com/Limitless-Hoops/limitless-hoops/dto"
 	"github.com/Limitless-Hoops/limitless-hoops/models"
 	"github.com/Limitless-Hoops/limitless-hoops/services"
-	"github.com/Limitless-Hoops/limitless-hoops/utils"
+	"github.com/Limitless-Hoops/limitless-hoops/utilities"
 	"github.com/Limitless-Hoops/limitless-hoops/validator"
 	"github.com/gofiber/fiber/v2"
 )
@@ -45,7 +45,7 @@ func CreateAdmin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"validation_error": err.Error()})
 	}
 
-	hash, err := utils.HashPassword(input.Password)
+	hash, err := utilities.HashPassword(input.Password)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Failed to hash password"})
 	}

@@ -1,4 +1,4 @@
-package utils
+package utilities
 
 import (
 	"github.com/Limitless-Hoops/limitless-hoops/config"

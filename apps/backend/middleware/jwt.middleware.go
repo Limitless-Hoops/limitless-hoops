@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"github.com/Limitless-Hoops/limitless-hoops/config"
-	"github.com/Limitless-Hoops/limitless-hoops/utils"
+	"github.com/Limitless-Hoops/limitless-hoops/utilities"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"
 	"log"
@@ -21,7 +21,7 @@ func JWTProtected() fiber.Handler {
 		}
 
 		log.Println("🔐 JWT secret length:", len(config.AppConfig.JwtKey))
-		claims := &utils.Claims{}
+		claims := &utilities.Claims{}
 		token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
 			return []byte(config.AppConfig.JwtKey), nil
 		})

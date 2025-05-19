@@ -7,6 +7,7 @@ $goVersion = "1.24.2"
 $dockerDesktopVersion = "4.30.0"
 $goInstallerUrl = "https://go.dev/dl/go$goVersion.windows-amd64.msi"
 $dockerInstallerUrl = "https://desktop.docker.com/win/main/$dockerDesktopVersion/Docker%20Desktop%20Installer.exe"
+$gotestfmtVersion = "v1.3.0"
 # =================
 
 Write-Host "🔧 Starting tool installation for Windows..."
@@ -59,7 +60,14 @@ function Install-Docker {
     Write-Host "✅ Docker Desktop $dockerDesktopVersion installed"
 }
 
+function Install-Gotestfmt {
+    Write-Host "`n🧪 Installing gotestfmt $gotestfmtVersion..."
+    & "$env:USERPROFILE\go\bin\go.exe" install "github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@$gotestfmtVersion"
+    Write-Host "✅ gotestfmt installed"
+}
+
 Install-Go
 Install-Docker
+Install-Gotestfmt
 
 Write-Host "`n✅ All tools installed successfully!"
