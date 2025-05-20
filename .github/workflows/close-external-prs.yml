@@ -1,0 +1,17 @@
+name: Close External PRs
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  check-author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close PR if not from a trusted user
+        if: github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "❌ Closing PR from external fork"
+          gh pr close "$GITHUB_HEAD_REF" --reason "not-planned"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
