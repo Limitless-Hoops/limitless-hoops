@@ -75,6 +75,33 @@ function Install-Staticcheck {
 Install-Go
 Install-Docker
 Install-Gotestfmt
-Install_Staticcheck
+Install-Staticcheck
+
+# Ensure Go bin is in PATH for future use
+if (-not ($env:PATH -like "*$env:USERPROFILE\go\bin*")) {
+    Write-Host "🔧 Adding Go bin path to user PATH..."
+
+    $newPath = "$env:USERPROFILE\go\bin"
+    $currentUserPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+
+    if ($currentUserPath -notlike "*$newPath*") {
+        [Environment]::SetEnvironmentVariable("PATH", "$currentUserPath;$newPath", "User")
+        Write-Host "✅ Go bin path added to user PATH (restart terminal to apply)"
+    }
+}
 
 Write-Host "`n✅ All tools installed successfully!"
+
+Write-Host "`n🔍 Verifying installed tool versions..."
+
+Write-Host "📦 Go version:"
+& go version
+
+Write-Host "`n🧪 gotestfmt version:"
+& gotestfmt --version
+
+Write-Host "`n🕵️ staticcheck version:"
+& staticcheck --version
+
+Write-Host "`n🐳 Docker version:"
+& docker --version

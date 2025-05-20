@@ -3,9 +3,9 @@
 # Ensure Go-installed tools are available
 export PATH="$PATH:$HOME/go/bin"
 
-# Find the Go module root (directory containing go.mod)
+# Find the Go module root starting from the script’s own location
 find_go_mod_root() {
-  local dir="$PWD"
+  local dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   while [ "$dir" != "/" ]; do
     if [ -f "$dir/go.mod" ]; then
       echo "$dir"
@@ -13,10 +13,11 @@ find_go_mod_root() {
     fi
     dir="$(dirname "$dir")"
   done
-  echo "❌ go.mod not found. Are you in a Go project?" >&2
+  echo "❌ go.mod not found. Are you in a Go module?" >&2
   exit 1
 }
 
+# Resolve the Go module root (apps/backend)
 MODULE_ROOT="$(find_go_mod_root)"
 cd "$MODULE_ROOT" || exit 1
 
@@ -48,9 +49,6 @@ if [ -f "$COVERAGE_FILE" ]; then
   echo -e "\n📊 Test Coverage Summary:"
   go tool cover -func=$COVERAGE_FILE | grep total:
   echo
-  # Optional: generate HTML report
-  go tool cover -html=$COVERAGE_FILE -o coverage.html
-  rm $COVERAGE_FILE
 fi
 
 if [ $EXIT_CODE -eq 0 ]; then
