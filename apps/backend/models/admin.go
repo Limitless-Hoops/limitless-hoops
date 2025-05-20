@@ -11,7 +11,7 @@ type Admin struct {
 	LastName     string     `gorm:"not null" json:"last_name"`
 	PhoneNumber  string     `gorm:"unique;not null" json:"phone_number"`
 	Email        string     `gorm:"unique;not null" json:"email"`
-	PasswordHash string     `gorm:"not null" json:"-" json:"-"`
+	PasswordHash string     `gorm:"not null" json:"-"`
 	Role         string     `gorm:"default:staff" json:"role"` // e.g. staff, admin, superadmin
 	DateOfBirth  *time.Time `gorm:"not null" json:"date_of_birth"`
 

@@ -1,15 +1,56 @@
 #!/bin/bash
 
-echo "🔎 Running tests..."
+# Ensure Go-installed tools are available
+export PATH="$PATH:$HOME/go/bin"
 
-# Capture output and exit code
-TEST_OUTPUT=$(go test ./... -json 2>&1 | gotestfmt)
+# Find the Go module root starting from the script’s own location
+find_go_mod_root() {
+  local dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  while [ "$dir" != "/" ]; do
+    if [ -f "$dir/go.mod" ]; then
+      echo "$dir"
+      return
+    fi
+    dir="$(dirname "$dir")"
+  done
+  echo "❌ go.mod not found. Are you in a Go module?" >&2
+  exit 1
+}
+
+# Resolve the Go module root (apps/backend)
+MODULE_ROOT="$(find_go_mod_root)"
+cd "$MODULE_ROOT" || exit 1
+
+echo "🧠 Running go vet..."
+go vet ./...
+if [ $? -ne 0 ]; then
+  echo -e "\n❌ go vet failed. Fix issues before continuing."
+  exit 1
+fi
+
+echo "🕵️ Running staticcheck..."
+if ! command -v staticcheck &> /dev/null; then
+  echo "⚠️ staticcheck not found. Skipping."
+else
+  staticcheck ./...
+  if [ $? -ne 0 ]; then
+    echo -e "\n❌ staticcheck failed. Fix issues before continuing."
+    exit 1
+  fi
+fi
+
+echo "🔎 Running tests with coverage..."
+COVERAGE_FILE="coverage.out"
+go test ./... -coverprofile=$COVERAGE_FILE -json 2>&1 | gotestfmt
 EXIT_CODE=$?
 
-# Print formatted output
-echo "$TEST_OUTPUT"
+# Display coverage summary
+if [ -f "$COVERAGE_FILE" ]; then
+  echo -e "\n📊 Test Coverage Summary:"
+  go tool cover -func=$COVERAGE_FILE | grep total:
+  echo
+fi
 
-# Show summary
 if [ $EXIT_CODE -eq 0 ]; then
   echo -e "\n✅ ✅ ✅  ALL TESTS PASSED ✅ ✅ ✅"
 else

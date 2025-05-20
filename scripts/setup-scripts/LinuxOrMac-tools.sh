@@ -80,6 +80,12 @@ install_gotestfmt() {
   echo "✅ gotestfmt installed at: $(which gotestfmt)"
 }
 
+install_staticcheck() {
+  echo "📦 Installing staticcheck..."
+  go install honnef.co/go/tools/cmd/staticcheck@latest
+  export PATH="$PATH:$HOME/go/bin"
+}
+
 # === OS Handling ===
 
 if [[ "$OS" == "Darwin" ]]; then
@@ -96,3 +102,18 @@ else
 fi
 
 install_gotestfmt
+install_staticcheck
+
+echo -e "\n🔍 Verifying installed tool versions..."
+
+echo "📦 Go version:"
+go version
+
+echo "🧪 gotestfmt version:"
+gotestfmt --version
+
+echo "🕵️ staticcheck version:"
+staticcheck --version
+
+echo "🐳 Docker version:"
+docker --version
