@@ -32,7 +32,7 @@ jobs:
 
       - name: Install test tools
         run: |
-          go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@v1.3.0
+          go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@v2.5.0
           go install honnef.co/go/tools/cmd/staticcheck@latest
 
       - name: Make test script executable
