@@ -4,3 +4,4 @@ postgres_data
 nginx/certs/*.crt
 nginx/certs/*.key
 apps/backend/coverage.html
+apps/backend/coverage.out
