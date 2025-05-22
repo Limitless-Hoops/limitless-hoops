@@ -3,12 +3,16 @@ package testutil
 import (
 	"context"
 	"fmt"
+	_ "github.com/lib/pq"
+	"log"
+	"time"
+
 	"github.com/Limitless-Hoops/limitless-hoops/models"
+	"github.com/docker/go-connections/nat"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"log"
 )
 
 var (
@@ -16,7 +20,6 @@ var (
 	dbContainer testcontainers.Container
 )
 
-// ConnectTestDB spins up a temporary Postgres container and connects GORM to it.
 func ConnectTestDB() *gorm.DB {
 	if testDB != nil {
 		return testDB
@@ -31,7 +34,9 @@ func ConnectTestDB() *gorm.DB {
 			"POSTGRES_USER":     "test_user",
 			"POSTGRES_PASSWORD": "test_password",
 		},
-		WaitingFor: wait.ForListeningPort("5432/tcp"),
+		WaitingFor: wait.ForSQL("5432/tcp", "postgres", func(host string, port nat.Port) string {
+			return fmt.Sprintf("host=%s user=test_user password=test_password dbname=limitless_test port=%s sslmode=disable", host, port.Port())
+		}).WithStartupTimeout(60 * time.Second),
 	}
 
 	var err error
