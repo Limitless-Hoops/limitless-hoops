@@ -8,17 +8,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:24.0.6-dind
-        options: --privileged
-        ports:
-          - 2375:2375
-        env:
-          DOCKER_TLS_CERTDIR: ""
-
     env:
-      DOCKER_HOST: tcp://localhost:2375
       GOPROXY: https://proxy.golang.org,direct
       GOTOOLCHAIN: local
 
@@ -33,7 +23,6 @@ jobs:
 
       - name: Install test tools
         run: |
-          echo "🧪 Installing gotestfmt and staticcheck..."
           go install github.com/gotesttools/gotestfmt/v2/cmd/gotestfmt@v2.5.0
           go install honnef.co/go/tools/cmd/staticcheck@latest
           echo "$HOME/go/bin" >> $GITHUB_PATH
