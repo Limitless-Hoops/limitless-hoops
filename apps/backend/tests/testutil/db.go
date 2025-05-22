@@ -25,8 +25,7 @@ func ConnectTestDB() *gorm.DB {
 	ctx := context.Background()
 
 	req := testcontainers.ContainerRequest{
-		Image:        "postgres:17.4-alpine3.21",
-		ExposedPorts: []string{"5432/tcp"},
+		Image: "postgres:17.4-alpine3.21",
 		Env: map[string]string{
 			"POSTGRES_DB":       "limitless_test",
 			"POSTGRES_USER":     "test_user",
