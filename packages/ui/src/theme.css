@@ -1,0 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Flamenco&family=Nanum+Brush+Script&family=Skranji&family=Staatliches&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* Default Generic Font */
+  --font-sans: 'Calibri', 'Roboto', sans-serif;
+
+  /* Team Specific Fonts */
+  --font-team-staatliches: 'Staatliches', sans-serif;
+  --font-team-skranji: 'Skranji', cursive;
+  --font-team-flamenco: 'Flamenco', sans-serif;
+  --font-team-nanumBrushScript: 'Nanum Brush Script',  sans-serif;
+  --font-team-comicNeue: 'Comic Neue', sans-serif;
+}

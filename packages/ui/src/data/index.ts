@@ -1,0 +1,1 @@
+export { denverTeams } from './denver';

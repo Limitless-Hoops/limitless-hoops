@@ -1,0 +1,8 @@
+{
+  "name": "limitless-hoops",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
