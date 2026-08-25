@@ -1,58 +1,42 @@
 # Limitless Hoops - Events & Scheduling Logic
 
-This document outlines the types of events hosted by Limitless Hoops and the business logic governing who can attend them, how much they cost, and how they map to membership tiers.
+This document defines the types of events hosted by Limitless Hoops, their scheduling mechanics, and the minimum membership tier required to access them. 
 
-## Event Categories
+*(For a full breakdown of what each tier includes and its pricing, see `membershipTiers.md`)*
 
-Based on the current schedule, events fall into several major categories:
+## Event Categories & Definitions
 
-### 1. Workouts & Open Play (High Frequency)
-*   **Shooting Workouts**
-*   **Skill Workouts**
-*   **Open Gyms**
-*   **Morning Boot Camps** (Seasonal)
+### 1. Workouts, Practices, & Open Play (High Frequency)
+These form the core weekly schedule and are accessible to all active members.
+*   **Games:** Local league games or scrimmages.
+    *   **Minimum Tier:** Recreation
+*   **Skill Workouts (M/W/F):** General skill development drills.
+    *   **Minimum Tier:** Recreation
+*   **Team Practices (Tue/Thu):** Team strategy and organized practice.
+    *   **Minimum Tier:** Recreation
+*   **Shooting Workouts (Sun):** Specialized shooting drills.
+    *   **Minimum Tier:** Recreation
+*   **Open Gym (Sat):** Unstructured playtime.
+    *   **Minimum Tier:** Recreation
 
-### 2. Team & Elite Events
-*   **Team Practices** *(Restricted: Elite Team Only)*
-*   **Team Strategy Sessions**
+### 2. Specialized Training (Clinics & Workshops)
+These are targeted, advanced training sessions requiring a slightly higher commitment.
+*   **Skill Clinics:** Specialized deep-dive clinics.
+    *   **Minimum Tier:** Seasonal
+*   **PnR (Pick and Roll) Workshops:** Tactical workshops focusing on the PnR.
+    *   **Minimum Tier:** Seasonal
 
-### 3. Specialized Training (Clinics & Workshops)
-*   **Skill Clinics**
-*   **Pick n Roll Workshops**
-
-### 4. Competitions & Assessments
-*   **Local League Games**
-*   **Travel Tournaments** *(Requires small fee)*
-*   **Ability & Agility Combines** *(Requires small fee)*
-*   **3-PT Tourney / Free Throw Rally / All-Star Game** (Quarterly special events)
-
-### 5. Camps (Seasonal)
-*   **Summer Camps**
-*   **Winter Camps**
+### 3. Camps & Assessments (Premium Events)
+These are premium, high-value events restricted to full-year or volunteer members.
+*   **Combines:** Ability and agility assessments.
+    *   **Minimum Tier:** Limitless
+*   **Winter Camp:** Multi-day winter seasonal intensive camp.
+    *   **Minimum Tier:** Limitless
+*   **Summer Camp:** Multi-day summer seasonal intensive camp.
+    *   **Minimum Tier:** Limitless
 
 ---
 
-## Business Rules for Booking & Access
-
-### 1. General Access Rule
-By default, **every member can attend everything**, regardless of their membership tier (Recreation, Seasonal, Limitless). 
-
-### 2. Elite Team Restriction
-The only current hard restriction is **Team Practices**. These are strictly for players who have made the Elite Travel Team (who also pay the $500/year Elite fee).
-
-### 3. Attendance Fees (Skin in the Game)
-While most workouts and open gyms are fully covered by the monthly/quarterly/annual membership tuition, the client requires **small fees for Tournaments and Combines**. 
-*   *Purpose:* To ensure accountability and that players actually show up when they book a spot for high-stakes or limited-capacity events.
-
-### 4. Future Tiered Capabilities (The "Wishlist" Feature)
-The client specifically noted: *"If we had tiered capabilities, I'd love to make it more events available for those who pay the whole year."*
-
-**System Design Implications for this Feature:**
-Because we are building this custom, we can absolutely support this. The event creation schema needs to support:
-*   **Tier Gating:** Admins can set minimum required tiers (e.g., "Limitless Tier Only" for certain premium clinics).
-*   **Tiered Pricing:** An event can have dynamic pricing based on the user's tier. For example, a Combine might be:
-    *   Limitless Members: $0 (Free)
-    *   Seasonal Members: $10
-    *   Recreation Members: $25
-    *   Non-Members: $50
-*   **Early Access:** Allow higher tiers to book spots 48 hours before lower tiers (valuable for camps and clinics with strict player maximums).
+## Technical Implications for Event Engine
+*   **Tier Gating (Hard Requirement):** When an event is created in the admin panel, it must be assigned a `minimum_tier_required`. The backend must check the user's current active subscription tier against this value before allowing a booking. 
+*   **UI Discoverability:** Events that a user does not have access to (e.g., a Recreation user viewing a Combine) should still be visible on the public and member calendars, but the booking button must be replaced with an "Upgrade Required" CTA to incentivize tier upgrades.

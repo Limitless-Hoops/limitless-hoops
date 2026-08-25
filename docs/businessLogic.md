@@ -1,7 +1,5 @@
 # Limitless Hoops Booking System 2.0 - Business Logic & Frontend Views
 
-Based on the 20 positives and 20 negatives from the current system, here is an initial breakdown of the business rules and the frontend views we need to support them. 
-
 ## 1. User Accounts & Roles
 Accounts are absolutely necessary to solve the current pain points. We need distinct experiences for different types of users:
 
@@ -18,12 +16,12 @@ Accounts are absolutely necessary to solve the current pain points. We need dist
 ## 2. Memberships, Pricing & Payments
 The payment system needs to be brought in-house to reduce friction.
 
-*   **Tiers:** Support for different membership levels (e.g., Elite, Regular) which dictate access and pricing.
+*   **Tiers & Strict Contracts:** Support for 2-month, 4-month, and 1-year commitments (Volunteer, Recreation, Seasonal, Limitless). See `membershipTiers.md` for the strict "Club Dues" billing logic, grace periods, and cancellation rules.
 *   **Dynamic Pricing:** The system must recognize the user's tier and apply the correct price (sometimes free) to an event.
-*   **Integrated Checkout:** Payments happen directly on the site.
+*   **Integrated Checkout:** Payments happen directly on the site via Stripe.
 *   **Cart System (High Priority):** Customers must be able to select multiple dates/events, add them to a cart, and check out all at once.
 *   **Billing Transparency:** Automated heads-up emails before recurring charges happen. Centralized view for admins to see all recurring payments.
-*   **Credits & Promos:** Ability to add account credit to a user, and apply promo codes for specific events or groups.
+*   **Upgrades & Credits:** Ability to calculate mid-contract upgrades (New Tier - Amount Paid = Balance Owed) and apply promo codes.
 
 ## 3. The Booking & Event Engine
 Events are complex and need flexible rules.
@@ -58,6 +56,3 @@ To build this frontend-first, here are the primary screens/views we should defin
 3.  **Venue Management:** Add and manage unlimited locations.
 4.  **Financial Hub:** View all recurring payments, issue refunds directly, and generate monthly printable reports.
 5.  **Communications Center:** Send targeted SMS/Email to specific event rosters.
-
----
-*This is a living document. We will refine this as we design the workflows.*

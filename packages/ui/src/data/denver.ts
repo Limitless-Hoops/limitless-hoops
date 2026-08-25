@@ -10,6 +10,20 @@ export interface TeamColors {
   secondary: string | null;
 }
 
+export interface TeamAssets {
+  banner: string;
+  horizontalMonogramWhiteBg: string;
+  horizontalStackedColoredWhiteBg: string;
+  iconBlackTransparentBg: string;
+  iconColoredBg: string; 
+  iconColoredBlackBg: string;
+  iconColoredTransparentBg: string;
+  motoColored: string;
+  stackedColoredBg: string; 
+  stackedColoredBlackBg: string;
+  stackedColoredWhiteBg: string;
+}
+
 export interface Team {
   id: string;
   name: string;
@@ -19,6 +33,7 @@ export interface Team {
   font: TeamFont;
   colors: TeamColors;
   emoji: string;
+  assets: TeamAssets;
 }
 
 export const denverTeams: Team[] = [
@@ -34,6 +49,19 @@ export const denverTeams: Team[] = [
       secondary: '#6b4423',
     },
     emoji: '🦌',
+    assets: {
+      banner: new URL('../assets/regions/denver/bucks/bucks-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/bucks/bucks-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/bucks/bucks-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/bucks/bucks-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/bucks/bucks-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/bucks/bucks-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/bucks/bucks-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/bucks/bucks-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/bucks/bucks-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/bucks/bucks-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/bucks/bucks-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'bulls',
@@ -47,6 +75,19 @@ export const denverTeams: Team[] = [
       secondary: '#71706e',
     },
     emoji: '🐂',
+    assets: {
+      banner: new URL('../assets/regions/denver/bulls/bulls-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/bulls/bulls-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/bulls/bulls-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/bulls/bulls-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/bulls/bulls-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/bulls/bulls-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/bulls/bulls-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/bulls/bulls-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/bulls/bulls-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/bulls/bulls-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/bulls/bulls-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'dragons',
@@ -57,9 +98,22 @@ export const denverTeams: Team[] = [
     moto: "LIGHT A FIRE THEY CAN'T PUT OUT!",
     colors: {
       primary: '#71a6d2',
-      secondary:'#50404d',
+      secondary: '#50404d',
     },
     emoji: ' 🐲',
+    assets: {
+      banner: new URL('../assets/regions/denver/dragons/dragons-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/dragons/dragons-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/dragons/dragons-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/dragons/dragons-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/dragons/dragons-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/dragons/dragons-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/dragons/dragons-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/dragons/dragons-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/dragons/dragons-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/dragons/dragons-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/dragons/dragons-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'eagles',
@@ -73,6 +127,19 @@ export const denverTeams: Team[] = [
       secondary: '#351e1c',
     },
     emoji: ' 🦅',
+    assets: {
+      banner: new URL('../assets/regions/denver/eagles/eagles-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/eagles/eagles-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/eagles/eagles-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/eagles/eagles-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/eagles/eagles-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/eagles/eagles-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/eagles/eagles-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/eagles/eagles-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/eagles/eagles-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/eagles/eagles-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/eagles/eagles-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'gators',
@@ -86,6 +153,19 @@ export const denverTeams: Team[] = [
       secondary: '#d7837f',
     },
     emoji: '🐊',
+    assets: {
+      banner: new URL('../assets/regions/denver/gators/gators-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/gators/gators-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/gators/gators-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/gators/gators-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/gators/gators-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/gators/gators-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/gators/gators-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/gators/gators-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/gators/gators-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/gators/gators-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/gators/gators-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'hornets',
@@ -99,6 +179,19 @@ export const denverTeams: Team[] = [
       secondary: '#783d3e',
     },
     emoji: ' 🐝',
+    assets: {
+      banner: new URL('../assets/regions/denver/hornets/hornets-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/hornets/hornets-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/hornets/hornets-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/hornets/hornets-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/hornets/hornets-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/hornets/hornets-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/hornets/hornets-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/hornets/hornets-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/hornets/hornets-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/hornets/hornets-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/hornets/hornets-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'jokers',
@@ -112,6 +205,19 @@ export const denverTeams: Team[] = [
       secondary: '#45b1e8',
     },
     emoji: '🃏',
+    assets: {
+      banner: new URL('../assets/regions/denver/jokers/jokers-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/jokers/jokers-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/jokers/jokers-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/jokers/jokers-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/jokers/jokers-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/jokers/jokers-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/jokers/jokers-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/jokers/jokers-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/jokers/jokers-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/jokers/jokers-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/jokers/jokers-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'lions',
@@ -125,6 +231,19 @@ export const denverTeams: Team[] = [
       secondary: '#905d5d',
     },
     emoji: '🦁',
+    assets: {
+      banner: new URL('../assets/regions/denver/lions/lions-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/lions/lions-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/lions/lions-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/lions/lions-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/lions/lions-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/lions/lions-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/lions/lions-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/lions/lions-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/lions/lions-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/lions/lions-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/lions/lions-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'pirates',
@@ -138,6 +257,19 @@ export const denverTeams: Team[] = [
       secondary: '#d6d6d6',
     },
     emoji: '🏴‍☠️',
+    assets: {
+      banner: new URL('../assets/regions/denver/pirates/pirates-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/pirates/pirates-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/pirates/pirates-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/pirates/pirates-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/pirates/pirates-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/pirates/pirates-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/pirates/pirates-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/pirates/pirates-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/pirates/pirates-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/pirates/pirates-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/pirates/pirates-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'raptors',
@@ -150,7 +282,20 @@ export const denverTeams: Team[] = [
       primary: '#d7837f',
       secondary: '#4c516d',
     },
-    emoji: '🦖'
+    emoji: '🦖',
+    assets: {
+      banner: new URL('../assets/regions/denver/raptors/raptors-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/raptors/raptors-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/raptors/raptors-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/raptors/raptors-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/raptors/raptors-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/raptors/raptors-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/raptors/raptors-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/raptors/raptors-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/raptors/raptors-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/raptors/raptors-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/raptors/raptors-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'sharks',
@@ -163,7 +308,20 @@ export const denverTeams: Team[] = [
       primary: '#006994',
       secondary: '#87cefa',
     },
-    emoji: '🦈'
+    emoji: '🦈',
+    assets: {
+      banner: new URL('../assets/regions/denver/sharks/sharks-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/sharks/sharks-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/sharks/sharks-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/sharks/sharks-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/sharks/sharks-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/sharks/sharks-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/sharks/sharks-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/sharks/sharks-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/sharks/sharks-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/sharks/sharks-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/sharks/sharks-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'stars',
@@ -176,7 +334,20 @@ export const denverTeams: Team[] = [
       primary: '#ffc34d',
       secondary: '#000000',
     },
-    emoji: '⭐'
+    emoji: '⭐',
+    assets: {
+      banner: new URL('../assets/regions/denver/stars/stars-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/stars/stars-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/stars/stars-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/stars/stars-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/stars/stars-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/stars/stars-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/stars/stars-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/stars/stars-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/stars/stars-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/stars/stars-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/stars/stars-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'tigers',
@@ -189,7 +360,20 @@ export const denverTeams: Team[] = [
       primary: '#e88e5a',
       secondary: '#000000',
     },
-    emoji: '🐯'
+    emoji: '🐯',
+    assets: {
+      banner: new URL('../assets/regions/denver/tigers/tigers-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/tigers/tigers-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/tigers/tigers-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/tigers/tigers-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/tigers/tigers-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/tigers/tigers-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/tigers/tigers-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/tigers/tigers-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/tigers/tigers-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/tigers/tigers-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/tigers/tigers-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'vikings',
@@ -203,6 +387,19 @@ export const denverTeams: Team[] = [
       secondary: '#bfc1c2',
     },
     emoji: '🛡️',
+    assets: {
+      banner: new URL('../assets/regions/denver/vikings/vikings-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/vikings/vikings-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/vikings/vikings-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/vikings/vikings-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/vikings/vikings-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/vikings/vikings-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/vikings/vikings-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/vikings/vikings-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/vikings/vikings-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/vikings/vikings-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/vikings/vikings-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'warriors',
@@ -216,6 +413,19 @@ export const denverTeams: Team[] = [
       secondary: '#a9b2c3',
     },
     emoji: '⚔',
+    assets: {
+      banner: new URL('../assets/regions/denver/warriors/warriors-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/warriors/warriors-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/warriors/warriors-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/warriors/warriors-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/warriors/warriors-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/warriors/warriors-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/warriors/warriors-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/warriors/warriors-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/warriors/warriors-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/warriors/warriors-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/warriors/warriors-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
   {
     id: 'wolves',
@@ -228,6 +438,19 @@ export const denverTeams: Team[] = [
       primary: '#716675',
       secondary: '#a8a9ad',
     },
-    emoji: '🐺'
+    emoji: '🐺',
+    assets: {
+      banner: new URL('../assets/regions/denver/wolves/wolves-banner.png', import.meta.url).href,
+      horizontalMonogramWhiteBg: new URL('../assets/regions/denver/wolves/wolves-horizontal-monogram-white-bg.png', import.meta.url).href,
+      horizontalStackedColoredWhiteBg: new URL('../assets/regions/denver/wolves/wolves-horizontal-stacked-colored-white-bg.png', import.meta.url).href,
+      iconBlackTransparentBg: new URL('../assets/regions/denver/wolves/wolves-icon-black-transparent-bg.png', import.meta.url).href,
+      iconColoredBg: new URL('../assets/regions/denver/wolves/wolves-icon-colored-bg.png', import.meta.url).href,
+      iconColoredBlackBg: new URL('../assets/regions/denver/wolves/wolves-icon-colored-black-bg.png', import.meta.url).href,
+      iconColoredTransparentBg: new URL('../assets/regions/denver/wolves/wolves-icon-colored-transparent-bg.png', import.meta.url).href,
+      motoColored: new URL('../assets/regions/denver/wolves/wolves-moto-colored.png', import.meta.url).href,
+      stackedColoredBg: new URL('../assets/regions/denver/wolves/wolves-stacked-colored-bg.png', import.meta.url).href,
+      stackedColoredBlackBg: new URL('../assets/regions/denver/wolves/wolves-stacked-colored-black-bg.png', import.meta.url).href,
+      stackedColoredWhiteBg: new URL('../assets/regions/denver/wolves/wolves-stacked-colored-white-bg.png', import.meta.url).href,
+    },
   },
 ];
