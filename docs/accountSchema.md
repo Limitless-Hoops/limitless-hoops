@@ -23,12 +23,14 @@ Represents a city or regional market. Every piece of city-specific data is scope
 
 ## 2. User (The Adult / Guardian)
 This is the person who creates an account, logs in, and pays.
-*(Note: We are using a 100% Password-less strategy for security and friction reduction. Users log in via OAuth or Email OTP.)*
+*(Note: We are using a 100% Password-less strategy. Login and Registration use the same unified flow. Users authenticate via Google OAuth, Email OTP, or SMS OTP.)*
 *   **ID:** (UUID)
-*   **Email:** (Unique)
-*   **OAuth_Provider:** (Enum: Google, Facebook, LinkedIn, Email_OTP)
-*   **OAuth_ID:** (String — The unique ID from the provider)
-*   **Phone_Number:** (Crucial for SMS alerts)
+*   **First_Name:** String (Collected during onboarding if not provided by Auth)
+*   **Last_Name:** String (Collected during onboarding if not provided by Auth)
+*   **Email:** (Unique, Nullable if they created account strictly via SMS — though email should be highly encouraged for billing receipts)
+*   **OAuth_Provider:** (Enum: `Google`, `Email_OTP`, `SMS_OTP`)
+*   **OAuth_ID:** (String — The unique ID from the provider, or the email/phone used for OTP)
+*   **Phone_Number:** (Crucial for SMS alerts and SMS OTP logins. Collected during onboarding if using Google/Email auth)
 *   **Stripe_Customer_ID:** (To manage their saved payment methods)
 *   **Referral_Code:** (Unique string — used for the affiliate/referral tracking system. See `teamBuildingEngine.md`)
 

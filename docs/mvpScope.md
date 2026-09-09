@@ -13,7 +13,7 @@ The goal of Phase 1 is to get families onto a Stripe-managed recurring payment p
 
 ### In Scope
 
-*   **Account Creation:** Passwordless login (OAuth + Email OTP). Household setup (parents + players).
+*   **Account Creation & Auth:** Unified Login/Register flow (passwordless). Supported methods: Google OAuth, Email OTP (6-digit code), and SMS OTP (6-digit code). If a user is new, the system routes them to a required onboarding step to collect missing profile data (First Name, Last Name, Phone Number). Household setup follows.
 *   **Tier Selection & Checkout:** Users select the Limitless tier (the only tier available before July) and choose Pay in Full or the 4-installment plan. Stripe handles the checkout.
 *   **Installment Billing Schedule:** Stripe Subscription Schedules handle the 4-month billing phase + 8-month access phase + annual renewal. No custom billing math on the backend.
 *   **Auto-Renewal Logic:** See full mechanic below.

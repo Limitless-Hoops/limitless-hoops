@@ -139,3 +139,12 @@ Each service in `apps/api/services/` is a self-contained Go package with its own
 - Repository (database queries)
 
 They start as one deployable binary. When any single service needs independent scaling (e.g., the curriculum service under heavy video load), it can be extracted into its own binary and deployed separately without touching the others. The API surface (routes, request/response shapes) does not change.
+
+---
+
+## Infrastructure & External Services
+
+*   **Payments & Billing:** Stripe. The single source of truth for all subscriptions, installments, and grandfathered pricing.
+*   **Transactional Email:** AWS SES (Simple Email Service) used for sending Email OTPs (6-digit codes) and automated billing reminders.
+*   **Transactional SMS:** AWS SNS (Simple Notification Service). Used for sending SMS OTPs and automated waitlist/roster alerts.
+    *   *Critical Compliance Note (A2P 10DLC):* To send SMS in the US, the business must complete Brand and Campaign registration. For AWS, this is done through the **Amazon Pinpoint Console** (even if sending via SNS). You must register the company as a "Brand" and create a "Campaign" with the use case "Account Notification" or "2FA". This process takes weeks and must be initiated early to ensure SMS delivery works by January.
