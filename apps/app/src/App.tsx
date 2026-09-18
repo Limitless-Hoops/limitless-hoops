@@ -2,9 +2,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import LoginPage from "./modules/auth/pages/LoginPage";
 import VerifyPage from "./modules/auth/pages/VerifyPage";
 import OnboardingPage from "./modules/auth/pages/OnboardingPage";
-import NotFound from "./modules/pages/NotFound";
-import TermsOfServicePage from "./modules/pages/TermsOfServicePage";
-import PrivacyPolicyPage from "./modules/pages/PrivacyPolicyPage";
+import NotFound from "./modules/static/NotFound";
+import TermsOfServicePage from "./modules/static/TermsOfServicePage";
+import PrivacyPolicyPage from "./modules/static/PrivacyPolicyPage";
+import DashboardPage from "./modules/dashboard/pages/DashboardPage";
+import AccountPage from "./modules/account/pages/AccountPage";
 
 function App() {
   return (
@@ -23,16 +25,9 @@ function App() {
         <Route path="/auth/verify" element={<VerifyPage />} />
         <Route path="/auth/onboarding" element={<OnboardingPage />} />
         
-        {/* Mock Dashboard */}
-        <Route path="/dashboard" element={
-          <div className="flex min-h-screen flex-col items-center justify-center bg-background text-foreground">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary text-3xl shadow-lg">
-              🏀
-            </div>
-            <h1 className="mt-4 text-3xl font-bold uppercase">Dashboard</h1>
-            <p className="text-muted-foreground mt-2">Authentication successful. You are in.</p>
-          </div>
-        } />
+        {/* Dashboard */}
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
     </Router>
   );

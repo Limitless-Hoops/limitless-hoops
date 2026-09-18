@@ -57,4 +57,36 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold tracking-tight text-white;
   }
+
+  /* Force date/time inputs into dark mode so the calendar icon is white */
+  input[type="date"],
+  input[type="datetime-local"],
+  input[type="time"],
+  input[type="month"],
+  input[type="week"] {
+    color-scheme: dark;
+  }
+  
+  /* Sleek, branded scrollbars for webkit browsers */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Firefox scrollbar support */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+  }
 }
