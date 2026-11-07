@@ -1,15 +1,19 @@
-import DashboardLayout from "../components/DashboardLayout";
+import DashboardLayout from "@/modules/dashboard/components/DashboardLayout";
 import { Button } from "@lh/ui";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/modules/auth/contexts/AuthContext";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
+  const { household } = useAuth();
+
+  const userName = household?.users?.[0]?.first_name || "User";
 
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
-          <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">Welcome, Jon</h1>
+          <h1 className="text-4xl font-extrabold tracking-tight text-white uppercase">Welcome, {userName}</h1>
           <p className="text-white/60 text-lg">Manage your household and subscription.</p>
         </div>
         

@@ -1,40 +1,70 @@
-import React, { useState, useRef } from "react";
-import { Button, Card, CardContent } from "@lh/ui";
+import { normalizePhoneForAPI } from "@lh/utils";
+import { useState } from "react";
+import { Card, CardContent } from "@lh/ui";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import LogoImage from "@lh/ui/assets/lh-branding/logo-horizontal.svg";
+import VerifyCodeForm from "@/modules/auth/components/VerifyCodeForm";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/modules/auth/contexts/AuthContext";
 
 export default function VerifyPage() {
   const [searchParams] = useSearchParams();
-  const identifier = searchParams.get("id") || "your device";
+  // M2: Remove dead ?email= fallback — only read ?id=
+  const identifier = searchParams.get("id");
   const navigate = useNavigate();
+  const { household } = useAuth();
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  // If there's no identifier in the query string, redirect back to login
+  if (!identifier) {
+    navigate("/login", { replace: true });
+    return null;
+  }
 
-  const handleChange = (index: number, value: string) => {
-    if (!/^[0-9]*$/.test(value)) return;
+  const isEmail = identifier.includes("@");
+
+  const handleVerify = async (code: string) => {
+    setLoading(true);
+    setError("");
     
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
+    const verifyPayload: any = {
+      token: code,
+      type: isEmail ? "email" : "sms",
+    };
+    
+    if (isEmail) {
+      verifyPayload.email = identifier;
+    } else {
+      verifyPayload.phone = normalizePhoneForAPI(identifier);
+    }
 
-    // Auto-advance
-    if (value !== "" && index < 5) {
-      inputRefs.current[index + 1]?.focus();
+    const { error } = await supabase.auth.verifyOtp(verifyPayload);
+    
+    setLoading(false);
+
+    if (error) {
+      setError(error.message);
+      return;
+    }
+
+    // H5: Navigate to dashboard for returning users, onboarding for new ones.
+    // After verifyOtp, onAuthStateChange fires and AuthContext fetches the household.
+    // Give it a moment, then check.
+    if (household) {
+      navigate("/dashboard", { replace: true });
+    } else {
+      navigate("/auth/onboarding", { replace: true });
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent) => {
-    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+  const handleResend = async () => {
+    setError("");
+    if (isEmail) {
+      await supabase.auth.signInWithOtp({ email: identifier });
+    } else {
+      await supabase.auth.signInWithOtp({ phone: normalizePhoneForAPI(identifier) });
     }
-  };
-
-  const handleVerify = () => {
-    const code = otp.join("");
-    console.log("Verifying code:", code);
-    // Mock successful login - route to onboarding for new user
-    navigate("/auth/onboarding");
   };
 
   return (
@@ -54,65 +84,18 @@ export default function VerifyPage() {
 
         {/* Glassmorphic Login Card */}
         <Card className="w-full border-white/10 bg-black/40 backdrop-blur-2xl shadow-2xl shadow-black/50 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-150 fill-mode-both">
-          <CardContent className="pt-8 text-center px-6 sm:px-8">
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-white/5 border border-white/10 text-white shadow-inner">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="28"
-                height="28"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect width="20" height="16" x="2" y="4" rx="2" />
-                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-              </svg>
-            </div>
-            
-            <h1 className="mb-2 text-2xl font-extrabold tracking-tight text-white">
-              Check your device
-            </h1>
-            <p className="mb-8 text-sm text-white/60 font-medium">
-              We sent a 6-digit code to <br />
-              <span className="font-bold text-white mt-1 block">{identifier}</span>
-            </p>
-
-            <div className="mb-8 flex justify-center gap-2 sm:gap-3">
-              {otp.map((digit, idx) => (
-                <input
-                  key={idx}
-                  ref={(el) => { inputRefs.current[idx] = el; }}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  value={digit}
-                  onChange={(e) => handleChange(idx, e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(idx, e)}
-                  className="h-12 w-10 sm:h-14 sm:w-12 rounded-lg border-white/10 bg-white/5 text-center text-lg sm:text-xl font-bold text-white focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary shadow-inner"
-                />
-              ))}
-            </div>
-
-            <Button
-              className="group relative h-14 w-full overflow-hidden rounded-lg bg-linear-to-r from-primary to-red-800 text-base font-bold tracking-wide text-white shadow-lg shadow-primary/25 transition-all hover:scale-[1.02] hover:shadow-primary/40 disabled:opacity-50 disabled:hover:scale-100"
-              onClick={handleVerify}
-              disabled={otp.some((d) => d === "")}
-            >
-              <div className="absolute inset-0 flex h-full w-full justify-center transform-[skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:transform-[skew(-12deg)_translateX(100%)]">
-                <div className="relative h-full w-8 bg-white/20" />
-              </div>
-              <span>Verify Code</span>
-            </Button>
-
-            <div className="mt-8 text-sm font-medium text-white/40">
-              Didn't receive it?{" "}
-              <button className="text-white/80 underline hover:text-white transition-colors">
-                Click to resend
-              </button>
-            </div>
+          <CardContent className="pt-8 px-6 sm:px-8 pb-8">
+            <VerifyCodeForm 
+              identifier={identifier} 
+              onVerify={handleVerify}
+              onResend={handleResend}
+              loading={loading}
+            />
+            {error && (
+              <p className="mt-4 text-center text-sm font-medium text-red-400">
+                {error}
+              </p>
+            )}
           </CardContent>
         </Card>
       </div>

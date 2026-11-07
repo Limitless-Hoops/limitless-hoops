@@ -6,9 +6,36 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8080:5173"
+      - "5173:5173"
 
     environment:
       - CHOKIDAR_USEPOLLING=true
     restart: unless-stopped
     
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: limitless
+      POSTGRES_PASSWORD: limitless_test_password
+      POSTGRES_DB: limitless_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./apps/api
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/api/.env
+    volumes:
+      - ./apps/api:/app
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -144,7 +144,10 @@ They start as one deployable binary. When any single service needs independent s
 
 ## Infrastructure & External Services
 
+*   **App Hosting (Compute):** GCP Cloud Run. Serverless container hosting for the Go API and React frontend. Scales to zero.
+*   **Database:** GCP Cloud SQL (PostgreSQL).
+*   **Authentication:** GCP Identity Platform / Firebase Auth.
 *   **Payments & Billing:** Stripe. The single source of truth for all subscriptions, installments, and grandfathered pricing.
-*   **Transactional Email:** AWS SES (Simple Email Service) used for sending Email OTPs (6-digit codes) and automated billing reminders.
-*   **Transactional SMS:** AWS SNS (Simple Notification Service). Used for sending SMS OTPs and automated waitlist/roster alerts.
-    *   *Critical Compliance Note (A2P 10DLC):* To send SMS in the US, the business must complete Brand and Campaign registration. For AWS, this is done through the **Amazon Pinpoint Console** (even if sending via SNS). You must register the company as a "Brand" and create a "Campaign" with the use case "Account Notification" or "2FA". This process takes weeks and must be initiated early to ensure SMS delivery works by January.
+*   **Transactional Email:** Resend. Used for sending Email OTPs (6-digit codes), automated billing reminders, and receipts. Chosen for its superior developer experience and API.
+*   **Transactional SMS:** Twilio. Used for sending SMS OTPs and automated waitlist/roster alerts.
+    *   *Critical Compliance Note (A2P 10DLC):* To send SMS in the US, the business must complete Brand and Campaign registration. This will be done through the **Twilio Trust Hub**. You must register the company as a "Brand" and create a "Campaign" with the use case "Account Notification" or "2FA". This process takes weeks and must be initiated early to ensure SMS delivery works by January.

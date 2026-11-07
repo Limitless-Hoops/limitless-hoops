@@ -4,3 +4,5 @@ node_modules
 .vscode
 *.exe
 *.sh
+apps/api/.env
+apps/app/.env

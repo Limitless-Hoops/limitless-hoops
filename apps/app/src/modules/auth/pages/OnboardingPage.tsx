@@ -1,18 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Input, Card, CardContent } from "@lh/ui";
 import { useNavigate } from "react-router-dom";
-import { isValidName, isValidPhone, formatPhone } from "@lh/utils";
+import { formatPhone, normalizePhoneForAPI, getDateOfBirthMax } from "@lh/utils";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/modules/auth/contexts/AuthContext";
 
 export default function OnboardingPage() {
   const navigate = useNavigate();
+  const { session, refreshHousehold, signOut } = useAuth();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    email: "", // Added for backend integration
     phoneNumber: "",
+    dob: "",
   });
+
+  // Pre-fill data from Google OAuth session
+  useEffect(() => {
+    if (session?.user) {
+      const metadata = session.user.user_metadata || {};
+      const fullName = metadata.full_name || metadata.name || "";
+      const userEmail = session.user.email || "";
+      const userPhone = session.user.phone || "";
+      
+      let initialFirstName = "";
+      let initialLastName = "";
+      
+      if (fullName) {
+        const parts = fullName.trim().split(" ");
+        initialFirstName = parts[0];
+        initialLastName = parts.slice(1).join(" ");
+      }
+
+      setFormData(prev => ({
+        ...prev,
+        firstName: prev.firstName || initialFirstName,
+        lastName: prev.lastName || initialLastName,
+        email: prev.email || userEmail,
+        phoneNumber: prev.phoneNumber || (userPhone ? formatPhone(userPhone) : ""),
+      }));
+    }
+  }, [session]);
 
   // Track validation errors natively in React to replace browser tooltips
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,33 +67,79 @@ export default function OnboardingPage() {
     const newErrors: Record<string, string> = {};
     if (!formData.firstName.trim()) {
       newErrors.firstName = "First name is required";
-    } else if (!isValidName(formData.firstName)) {
-      newErrors.firstName = "Name can only contain letters, spaces, hyphens, and apostrophes";
     }
-    
     if (!formData.lastName.trim()) {
       newErrors.lastName = "Last name is required";
-    } else if (!isValidName(formData.lastName)) {
-      newErrors.lastName = "Name can only contain letters, spaces, hyphens, and apostrophes";
     }
-    
+    // C6: Email is required UNLESS the user authenticated via phone OTP
+    // (in which case session.user.email will be empty and phone is their identity)
+    const isPhoneOnlyUser = !session?.user?.email && !!session?.user?.phone;
+    if (!isPhoneOnlyUser) {
+      if (!formData.email.trim() || !formData.email.includes("@")) {
+        newErrors.email = "Valid email address is required";
+      }
+    }
     if (!formData.phoneNumber.trim()) {
       newErrors.phoneNumber = "Phone number is required";
-    } else if (!isValidPhone(formData.phoneNumber)) {
-      newErrors.phoneNumber = "Please enter a valid 10-digit phone number";
+    }
+    if (!formData.dob.trim()) {
+      newErrors.dob = "Date of Birth is required";
     }
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevent page reload
     if (!validate()) return; // Stop if validation fails
     
-    console.log("Saving user profile...", formData);
-    // Mock routing to the dashboard
-    navigate("/dashboard");
+    setIsSubmitting(true);
+    setApiError("");
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("No active session. Please log in again.");
+      }
+
+      const response = await fetch("http://localhost:3000/api/households", {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`
+        },
+        body: JSON.stringify({
+          parent: {
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: normalizePhoneForAPI(formData.phoneNumber),
+            dob: formData.dob,
+          },
+          players: [], // We create the household first, they add players later in the dashboard
+        }),
+      });
+
+      if (!response.ok) {
+        let errMsg = "Failed to create household on the server";
+        try {
+          const resJson = await response.json();
+          if (resJson.error) errMsg = resJson.error;
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+        throw new Error(errMsg);
+      }
+
+      await refreshHousehold();
+      navigate("/dashboard");
+    } catch (err: any) {
+      console.error(err);
+      setApiError(err.message || "Something went wrong. Please ensure the API is running.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,31 +194,82 @@ export default function OnboardingPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="flex items-center justify-between text-sm font-semibold text-white/80">
-                  <span>Phone Number</span>
-                  <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Required for SMS</span>
+                <label className="text-sm font-semibold text-white/80">
+                  Email Address
                 </label>
                 <Input
-                  name="phoneNumber"
-                  type="tel"
-                  value={formData.phoneNumber}
+                  name="email"
+                  type="email"
+                  value={formData.email}
                   onChange={handleChange}
-                  placeholder="(555) 000-0000"
-                  error={errors.phoneNumber}
-                  className="h-14 bg-white/5 px-4 text-base text-white placeholder:text-white/30 focus:ring-1 transition-colors border-white/10 focus:border-primary focus:ring-primary"
+                  placeholder="parent@example.com"
+                  error={errors.email}
+                  disabled={!!session?.user?.email}
+                  className="h-14 bg-white/5 px-4 text-base text-white placeholder:text-white/30 focus:ring-1 transition-colors border-white/10 focus:border-primary focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
                 />
               </div>
+
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <label className="flex items-center justify-between text-sm font-semibold text-white/80">
+                    <span>Phone Number</span>
+                    <span className="text-xs font-medium text-white/40 uppercase tracking-wider">Required for SMS</span>
+                  </label>
+                  <Input
+                    name="phoneNumber"
+                    type="tel" prefixText="+1"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
+                    placeholder="(555) 000-0000"
+                    error={errors.phoneNumber}
+                    disabled={!!session?.user?.phone}
+                    className="h-14 bg-white/5 px-4 text-base text-white placeholder:text-white/30 focus:ring-1 transition-colors border-white/10 focus:border-primary focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-white/80">
+                    Date of Birth
+                  </label>
+                  <Input
+                    name="dob"
+                    type="date"
+                    value={formData.dob}
+                    max={getDateOfBirthMax(18)}
+                    onChange={handleChange}
+                    error={errors.dob}
+                    className="h-14 bg-white/5 px-4 text-base text-white placeholder:text-white/30 focus:ring-1 transition-colors border-white/10 focus:border-primary focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              {apiError && (
+                <div className="text-red-500 text-sm text-center font-medium">
+                  {apiError}
+                </div>
+              )}
 
               <div className="pt-4">
                 <Button 
                   type="submit" 
-                  className="group relative h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-primary to-red-800 text-base font-bold tracking-wide text-white shadow-lg shadow-primary/25 transition-all hover:scale-[1.02] hover:shadow-primary/40"
+                  disabled={isSubmitting}
+                  className="group relative h-14 w-full overflow-hidden rounded-lg bg-gradient-to-r from-primary to-red-800 text-base font-bold tracking-wide text-white shadow-lg shadow-primary/25 transition-all hover:scale-[1.02] hover:shadow-primary/40 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <div className="absolute inset-0 flex h-full w-full justify-center [transform:skew(-12deg)_translateX(-100%)] group-hover:duration-1000 group-hover:[transform:skew(-12deg)_translateX(100%)]">
                     <div className="relative h-full w-8 bg-white/20" />
                   </div>
                   <span>Complete Setup</span>
                 </Button>
+              </div>
+
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => signOut().then(() => navigate("/login", { replace: true }))}
+                  className="cursor-pointer text-xs font-medium text-white/60 underline underline-offset-2 transition-colors hover:text-white"
+                >
+                  Sign out and use a different account
+                </button>
               </div>
             </form>
           </CardContent>

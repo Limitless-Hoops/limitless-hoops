@@ -90,3 +90,8 @@
     scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
   }
 }
+
+/* Force dark mode native UI elements (scrollbars, autofill, date pickers) */
+:root {
+  color-scheme: dark;
+}
