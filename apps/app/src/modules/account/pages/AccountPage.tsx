@@ -131,7 +131,7 @@ function SecurityTab() {
 }
 
 function HouseholdTab() {
-  const [guardianPhone, setGuardianPhone] = useState("(555) 987-6543");
+  const [guardianPhone] = useState("(555) 987-6543");
 
   return (
     <div className="space-y-8">
