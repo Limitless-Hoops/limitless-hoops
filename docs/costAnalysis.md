@@ -22,42 +22,42 @@ Payment gateways take a cut of every transaction. If the business absorbs these 
 ## 2. Authentication (Identity Management)
 We are adopting a **100% Password-less Strategy**. Users will log in via Google, Facebook, LinkedIn, or an Email One-Time-Passcode (OTP). 
 
-### Custom OAuth & OTP (Go Backend)
-*   **Cost:** **$0 / month**. 
-*   **Pros:** Highly secure (no breached passwords), less friction for users, no vendor lock-in. Email OTPs cost fractions of a penny via AWS.
+### Google Identity / Custom OTP
+*   **Cost:** **$0 / month**. (Firebase Auth / Identity Platform has a massive free tier).
+*   **Pros:** Highly secure (no breached passwords), less friction for users, built-in Google SSO support.
 *   **Cons:** *Apple Sign-In is excluded for now as it requires a $99/yr Apple Developer fee.*
 
 ---
 
-## 3. Hosting & Infrastructure (AWS)
-Running a custom web app, database, and background workers requires server hosting. We will assume the high-end managed route for maximum reliability. The base infrastructure has fixed minimum costs, but scales automatically.
+## 3. Hosting & Infrastructure (GCP)
+Running a custom web app, database, and background workers requires server hosting. We are using a serverless approach with Google Cloud Platform (GCP) to minimize costs while allowing infinite scale.
 
-### AWS Managed Services (ECS + RDS)
-*   **Estimated Base Cost:** **~$60 / month**.
+### GCP Serverless (Cloud Run + Cloud SQL)
+*   **Estimated Base Cost:** **~$15 - $20 / month**.
 *   **Breakdown:** 
-    *   Managed PostgreSQL Database (RDS): ~$18/mo
-    *   App Hosting (ECS / Fargate): ~$15/mo
-    *   Load Balancer & Networking: ~$25/mo
-*   **Verdict:** "Set it and forget it". Automated backups, highly secure, and scales automatically. As traffic grows, AWS will dynamically provision more resources, leading to a linear but marginal increase in costs.
+    *   Managed PostgreSQL Database (Cloud SQL Micro): ~$15/mo
+    *   App Hosting (Cloud Run): $0 to $5/mo (Scales to zero, massive free tier)
+    *   Load Balancer & Networking: $0/mo (Included securely with Cloud Run)
+*   **Verdict:** Highly cost-effective for early-stage products. Cloud Run scales down to exactly $0 when there is no traffic, avoiding the "always-on" tax of traditional cloud architecture.
 
 ---
 
 ## 4. Communications (Email & SMS)
 Communication costs scale directly with the size of the roster and frequency of events.
 
-### SMS Text Reminders (High-End Volume)
-*   **Provider:** Twilio or AWS SNS (~$0.0079 per text).
+### SMS Text Reminders
+*   **Provider:** Twilio (~$0.0079 per text).
 *   **Estimated Cost:** ~$7.90 per 1,000 text messages sent.
 
-### Email Notifications (Receipts, Announcements)
-*   **Provider:** AWS SES ($0.10 per 1,000 emails).
-*   **Estimated Cost:** Highly affordable. 10,000 emails costs $1.00.
+### Email Notifications (Receipts, OTPs, Announcements)
+*   **Provider:** Resend.
+*   **Estimated Cost:** **$0/mo** (First 3,000 emails per month are free). Once passing 3,000/mo, the cost is a flat $20/mo for up to 50,000 emails.
 
 ---
 
 ## Summary of Costs
 
-The platform itself has a very low base operating cost (roughly $86/mo to run on AWS at base scale, including domain names and minor communications). 
+The platform itself has a very low base operating cost (roughly $25-$30/mo to run on GCP at base scale, including Twilio SMS and domains). 
 
 The primary variable expense is entirely dependent on how much revenue is processed through the platform and the payment methods chosen:
 *   **Credit Card Heavy:** Approximately 3% of gross revenue goes to Stripe.

@@ -12,6 +12,8 @@
   "dependencies": {
     "@lh/ui": "*",
     "@lh/utils": "*",
+    "@supabase/supabase-js": "^2.117.0",
+    "dotenv": "^18.0.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-router-dom": "^7.18.2"

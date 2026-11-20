@@ -11,7 +11,18 @@ export const isValidEmail = (email: string): boolean => {
  */
 export const isValidPhone = (phone: string): boolean => {
   const digitsOnly = phone.replace(/\D/g, "");
-  return digitsOnly.length === 10;
+  return digitsOnly.length === 10 || (digitsOnly.length === 11 && digitsOnly.startsWith("1"));
+};
+
+/**
+ * Normalizes a phone number to strict E.164 format (+1XXXXXXXXXX) for API payloads.
+ */
+export const normalizePhoneForAPI = (phone: string): string => {
+  let digitsOnly = phone.replace(/\D/g, "");
+  if (digitsOnly.length === 10) {
+    digitsOnly = "1" + digitsOnly;
+  }
+  return `+${digitsOnly}`;
 };
 
 /**
@@ -44,16 +55,30 @@ export const formatPhone = (value: string): string => {
   if (!value) return value;
   
   // Clean the input for any non-digit values.
-  const phoneNumber = value.replace(/[^\d]/g, "");
-  const phoneNumberLength = phoneNumber.length;
+  let phoneNumber = value.replace(/[^\d]/g, "");
   
-  // We return the raw value if it's empty
+  // If they pasted a number with a leading 1, strip it so we only handle the 10 digits
+  if (phoneNumber.length === 11 && phoneNumber.startsWith("1")) {
+    phoneNumber = phoneNumber.slice(1);
+  }
+
+  const phoneNumberLength = phoneNumber.length;
   if (phoneNumberLength === 0) return "";
   
-  // Format based on length
-  if (phoneNumberLength < 4) return phoneNumber;
+  if (phoneNumberLength < 4) return `(${phoneNumber}`;
   if (phoneNumberLength < 7) {
     return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3)}`;
   }
   return `(${phoneNumber.slice(0, 3)}) ${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6, 10)}`;
+};
+
+/**
+ * Returns the maximum date string (YYYY-MM-DD) allowed for a given minimum age.
+ * E.g., getDateOfBirthMax(18) ensures the selected date is at least 18 years ago.
+ * Passing 0 returns today's date (cannot be born in the future).
+ */
+export const getDateOfBirthMax = (minAgeInYears: number): string => {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() - minAgeInYears);
+  return d.toISOString().split('T')[0];
 };

@@ -1,6 +1,5 @@
 import * as React from "react"
-import { Input } from "./input"
-import type { InputProps } from "./input"
+import { Input, type InputProps } from "./input"
 
 export interface FormFieldProps extends InputProps {
   label: string;

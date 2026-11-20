@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../../packages/ui/src";
 
 /* Import the shared Limitless Hoops design system variables */
 @import "../../../packages/ui/src/globals.css";
